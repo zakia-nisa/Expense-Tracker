@@ -10,6 +10,7 @@ function Header() {
   const {user, isSignedIn} = useUser();
   return (
     <div className='p-5 flex justify-between items-center bg-gray-800 text-white border shadow-sm'>
+      This is Faharia
         <Image src={'./logo.svg'}
         alt='logo'
         width={160}
