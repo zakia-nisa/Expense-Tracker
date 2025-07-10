@@ -28,12 +28,12 @@ function SideNav() {
 
       <div className='mt-10'>
         <ul>
-          {menuList.map((menu) => (
+          {menuList.map((menu,index) => (
             <li key={menu.id}>
               <Link href={menu.path}>
                 <div className={`flex items-center gap-2 py-5 px-4 text-gray-500 font-medium mb-2
                   cursor-pointer rounded-md hover:text-black hover:bg-blue-100 transition-all
-                  ${pathname === menu.path ? 'bg-blue-100 text-primary' : ''}`}>
+                  ${pathname == menu.path ? 'bg-blue-100 text-primary' : ''}`}>
                   <menu.icon />
                   {menu.name}
                 </div>
