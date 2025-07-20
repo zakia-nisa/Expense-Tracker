@@ -6,11 +6,13 @@ import { desc, eq, getTableColumns, sql } from 'drizzle-orm';
 import React, { useEffect} from 'react'
 
 function ExpensesScreen({params}) {
-  const { user } = useUser();
-    useEffect(() => {
-        user&&getBudgetInfo();
+  const resolvedParams = React.use(params);
+  const itemId = resolvedParams.id;
 
-    }, [user]);
+  const { user } = useUser();
+  useEffect(() => {
+    user&&getBudgetInfo();
+  }, [user]);
 
     
     const getBudgetInfo = async () => {
@@ -21,8 +23,9 @@ function ExpensesScreen({params}) {
         }).from(Budgets)
         .leftJoin(Expenses, eq(Budgets.id, Expenses.budgetId))
         .where(eq(Budgets.createdBy, user?.primaryEmailAddress?.emailAddress))
-        .where(eq(Budgets.id, params.id))
-        .orderBy(desc(Budgets.id))
+        .where(eq(Budgets.id, itemId))
+        .groupBy(Budgets.id)
+        // .orderBy(desc(Budgets.id))
 
         console.log(result);
 
