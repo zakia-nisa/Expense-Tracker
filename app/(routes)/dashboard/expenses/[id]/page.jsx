@@ -3,13 +3,17 @@ import { db } from '@/utils/dbConfig';
 import { Budgets, Expenses } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
 import { desc, eq, getTableColumns, sql } from 'drizzle-orm';
-import React, { useEffect} from 'react'
+import React, { useEffect, useState} from 'react'
+import BudgetItem from '../../budgets/_components/BudgetItem';
+import AddExpense from '../_components/AddExpense';
 
 function ExpensesScreen({params}) {
   const resolvedParams = React.use(params);
   const itemId = resolvedParams.id;
 
   const { user } = useUser();
+  const [budgetInfo, setbudgetInfo] = useState();
+
   useEffect(() => {
     user&&getBudgetInfo();
   }, [user]);
@@ -27,6 +31,7 @@ function ExpensesScreen({params}) {
         .groupBy(Budgets.id)
         // .orderBy(desc(Budgets.id))
 
+        setbudgetInfo(result[0]);
         console.log(result);
 
     }
@@ -34,6 +39,19 @@ function ExpensesScreen({params}) {
   return (
     <div className='p-10'>
         <h2 className='text-2xl font-bold'>My Expenses</h2>
+        <div className='grid grid-cols-1 md:grid-cols-2 mt-6 gap-5'>
+          {budgetInfo? <BudgetItem
+          budget={budgetInfo}
+          />:
+          <div className='h-[150px] w-full bg-slate-200 
+          rounded-lg animate-pulse'>
+          </div>}
+          <AddExpense budgetId={itemId}
+          user={user}
+          refreshData={()=>getBudgetInfo()}
+          />
+          
+        </div>
     </div>
   )
 }

@@ -78,14 +78,14 @@ function CreateBudget({refreshData}) {
                         </div>
                         <div className='mt-2'>
                             <h2 className='text-black font-medium my-1'>Budget Name</h2>
-                            <Input placeholder="e.g. Home Decor" 
+                            <Input placeholder="e.g. Bazar Expenses" 
                             onChange={(e)=>setName(e.target.value)}/>
                         </div>
                         <div className='mt-2'>
                             <h2 className='text-black font-medium my-1'>Budget Amount</h2>
                             <Input 
                             type="number"
-                            placeholder="e.g. 500$" 
+                            placeholder="e.g. 200Tk." 
                             onChange={(e)=>setAmount(e.target.value)}/>
                         </div>          
                     </div>               
