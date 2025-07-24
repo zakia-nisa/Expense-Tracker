@@ -6,6 +6,8 @@ import { desc, eq, getTableColumns, sql } from 'drizzle-orm';
 import React, { useEffect, useState} from 'react'
 import BudgetItem from '../../budgets/_components/BudgetItem';
 import AddExpense from '../_components/AddExpense';
+import ExpenseListTable from '../_components/ExpenseListTable';
+import { get } from 'http';
 
 function ExpensesScreen({params}) {
   const resolvedParams = React.use(params);
@@ -13,12 +15,15 @@ function ExpensesScreen({params}) {
 
   const { user } = useUser();
   const [budgetInfo, setbudgetInfo] = useState();
+  const [expensesList, setExpensesList] = useState([]);
 
   useEffect(() => {
+
     user&&getBudgetInfo();
+    getExpensesList();
   }, [user]);
 
-    
+    // Get Budget Information
     const getBudgetInfo = async () => {
       const result = await db.select({
           ...getTableColumns(Budgets),
@@ -32,10 +37,24 @@ function ExpensesScreen({params}) {
         // .orderBy(desc(Budgets.id))
 
         setbudgetInfo(result[0]);
-        console.log(result);
+        getExpensesList();
+        // console.log(result);
 
     }
-    
+
+    // get latest expense
+    const getExpensesList = async () => {
+      const result = await db.select().from(Expenses)
+      .where(eq(Expenses.budgetId, itemId))
+      // .where(eq(Expenses.createdBy, user?.primaryEmailAddress?.emailAddress))
+      .orderBy(desc(Expenses.id))
+
+      setExpensesList(result);
+
+      console.log(result);
+      // return result;
+    }
+
   return (
     <div className='p-10'>
         <h2 className='text-2xl font-bold'>My Expenses</h2>
@@ -51,6 +70,12 @@ function ExpensesScreen({params}) {
           refreshData={()=>getBudgetInfo()}
           />
           
+        </div>
+        <div>
+          <h2 className='font-bold text-lg mt-3'>Latest Expenses</h2>
+          <ExpenseListTable expensesList={expensesList}
+          refreshData={()=> getBudgetInfo()}
+          />
         </div>
     </div>
   )
