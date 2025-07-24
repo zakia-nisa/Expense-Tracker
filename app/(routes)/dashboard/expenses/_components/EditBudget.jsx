@@ -1,6 +1,7 @@
 "use client"
-import EmojiPicker from 'emoji-picker-react'
-import React from 'react'
+import { Button } from '@/components/ui/button'
+import { PenBox } from 'lucide-react'
+import React, { use, useEffect, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -10,56 +11,55 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { on } from 'events';
+import EmojiPicker from 'emoji-picker-react'
 import { useUser } from '@clerk/nextjs'
-import { toast } from "sonner";
-import { db } from '@/utils/dbConfig';
-import { Budgets } from '@/utils/schema';
+import { Input } from '@/components/ui/input'
 import { DialogClose } from '@radix-ui/react-dialog';
+import { eq } from 'drizzle-orm'
+import { db } from '@/utils/dbConfig'
+import { Budgets } from '@/utils/schema'
+import { toast } from 'sonner'
 
-function CreateBudget({refreshData}) {
-
-    const [emojiIcon,setEmojiIcon]=useState('😀');
+function EditBudget({budgetInfo, refreshData}) {
+    const [emojiIcon,setEmojiIcon]=useState(budgetInfo?.icon || '😀');
     const [openEmojiPicker,setOpenEmojiPicker]=useState(false);
 
     const [name,setName]=useState();
     const [amount,setAmount]=useState();
 
     const {user} = useUser();
-    
-    const onCreateBudget=async () => {
-        const result=await db.insert(Budgets)
-        .values({
-            name:name,
-            amount:amount,
-            createdBy:user?.primaryEmailAddress?.emailAddress,
-            icon:emojiIcon
-        })
-        .returning({ insertedId: Budgets.id });
 
+    useEffect(() => {
+        if(budgetInfo) {
+            setEmojiIcon(budgetInfo?.icon);
+            setName(budgetInfo?.name);
+            setAmount(budgetInfo?.amount);
+        }       
+    },[budgetInfo]);
+
+    const onUpdateBudget = async () => {
+        const result=await db.update(Budgets).set({
+            name: name,
+            amount: amount,
+            icon: emojiIcon
+        }).where(eq(Budgets.id, budgetInfo.id))
+        .returning();
+        
         if (result) {
             refreshData();
-            toast('New Budget Created!');
+            toast('Budget Updated Successfully!');
         }
     }
 
   return (
-    <div>
+    <div>       
         <Dialog>
             <DialogTrigger asChild>
-                <div className='bg-slate-100 p-10 rounded-md
-                items-center flex flex-col border-2 border-dashed 
-                cursor-pointer hover:shadow-md'>
-                    <h2 className='text-3xl'>+</h2>
-                    <h2>Create a New Budget</h2>
-                </div>
+                <Button className="flex gap-2"> <PenBox/> Edit</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                <DialogTitle>Create New Budget</DialogTitle>
+                <DialogTitle>Update Budget</DialogTitle>
                 <DialogDescription>
                     <div className='mt-5'>
                         <Button variant="outline"
@@ -80,12 +80,14 @@ function CreateBudget({refreshData}) {
                         <div className='mt-2'>
                             <h2 className='text-black font-medium my-1'>Budget Name</h2>
                             <Input placeholder="e.g. Bazar Expenses" 
+                            defaultValue={budgetInfo?.name}
                             onChange={(e)=>setName(e.target.value)}/>
                         </div>
                         <div className='mt-2'>
                             <h2 className='text-black font-medium my-1'>Budget Amount</h2>
                             <Input 
                             type="number"
+                            defaultValue={budgetInfo?.amount}
                             placeholder="e.g. 200Tk." 
                             onChange={(e)=>setAmount(e.target.value)}/>
                         </div>          
@@ -96,9 +98,9 @@ function CreateBudget({refreshData}) {
                     <DialogClose asChild>
                         <Button 
                             disabled={!(name&&amount)}
-                            onClick={()=>onCreateBudget()}
+                            onClick={()=>onUpdateBudget()}
                             className='mt-5 w-full'>
-                            Create Budget
+                            Update Budget
                         </Button>    
                     </DialogClose>
                 </DialogFooter>
@@ -108,4 +110,4 @@ function CreateBudget({refreshData}) {
   )
 }
 
-export default CreateBudget
+export default EditBudget;
