@@ -13,9 +13,9 @@ function SideNav() {
   const menuList = [
     { id: 1, name: 'Dashboard', icon: LayoutGrid, path: '/dashboard' },
     { id: 2, name: 'Budgets', icon: PiggyBank, path: '/dashboard/budgets' },
-    { id: 3, name: 'Expenses', icon: ReceiptText, path: '/dashboard/expenses/1' },
-    { id: 4, name: 'Upgrades', icon: ShieldCheck, path: '/dashboard/upgrades' },
-    { id: 5, name: 'Settings', icon: Settings, path: '/dashboard/settings' }
+    { id: 3, name: 'Expenses', icon: ReceiptText, path: '/dashboard/expenses' },
+    // { id: 4, name: 'Upgrades', icon: ShieldCheck, path: '/dashboard/upgrades' },
+    // { id: 5, name: 'Settings', icon: Settings, path: '/dashboard/settings' }
   ];
 
   useEffect(() => {
