@@ -1,5 +1,6 @@
-import {PiggyBank, ReceiptText, Wallet} from 'lucide-react'
-import React, { useEffect } from 'react'
+"use client"
+import {PiggyBank, ReceiptText, Wallet} from 'lucide-react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 
 function CardInfo({budgetList}) {
