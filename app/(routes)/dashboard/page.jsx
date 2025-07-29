@@ -44,13 +44,14 @@ function Dashboard() {
       <p className= 'text-gray-500'>Here's what happenning with your money, Let's manage your expenses.</p>
 
       <CardInfo budgetList={budgetList} />
-      <div className= 'grid grid-cols-1 md:grid-cols-3 mt-6'>
+      <div className= 'grid grid-cols-1 md:grid-cols-3 mt-6 gap-5'>
         <div className='md: col-span-2'>
           <BarChartDashboard 
           budgetList={budgetList}
           />
         </div>
-        <div>
+        <div className='grid gap-5'>
+          <h2 className='font-bold text-lg'></h2>
           {budgetList.map((budget,index) =>(
             <BudgetItem budget={budget} key={index}  />
           ))}
