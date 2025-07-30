@@ -34,7 +34,7 @@
     "@tailwindcss/postcss": "^4",
     "@types/node": "24.0.10",
     "@types/react": "19.1.8",
-    "drizzle-kit": "^0.18.1",
+    "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.3",
     "i": "^0.3.7",
     "npm": "^11.5.1",

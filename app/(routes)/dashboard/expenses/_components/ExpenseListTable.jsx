@@ -9,8 +9,8 @@ function ExpenseListTable({ expensesList, refreshData }) {
 
   const deleteExpense = async (expense) => {
     const result = await db.delete(Expenses)
-    .where(eq(Expenses.id, expense.id))
-    .returning();
+     .where(eq(Expenses.id, expense.id))
+     .returning();
 
     if(result) {
       toast('Expense Deleted!');
@@ -29,19 +29,30 @@ function ExpenseListTable({ expensesList, refreshData }) {
           <h2 className='font-bold'>Date</h2>
           <h2 className='font-bold'>Action</h2>
       </div>
-      {expensesList.map((expenses,index) => (
+      {expensesList.map((expenses, index) => (
         <div key={expenses.id || index} className="grid grid-cols-4 bg-slate-50 p-2">
           <h2>{expenses.name}</h2>
           <h2>{expenses.amount}</h2>
           <h2>{expenses.createdAt}</h2>
           <h2>
-            <Trash className=' text-red-600 cursor-pointer' 
-              onClick={() => deleteExpense(expenses)}
-            />
+             <Trash className='text-red-600 cursor-pointer'
+             onClick={() => deleteExpense(expenses)}
+             />
           </h2>
         </div>
       ))}
-    </div>
+        {expensesList.length === 0 && (
+           <div className='text-center text-gray-500 p-4'>
+              No expenses found! 💸💔
+           </div>
+         )}
+     </div>
+    
+ 
+          
+        
+      
+    
   )
 }
 
