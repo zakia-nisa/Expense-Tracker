@@ -42,20 +42,21 @@ function Dashboard() {
    /**
     * Used to get all expenses for the user
     */
-    const getAllExpenses = async () => {
+    const getAllExpenses=async()=> {
       const result = await db.select({
         id: Expenses.id,
         name: Expenses.name,
         amount: Expenses.amount,
-        createdAt: Expenses.createdAt,
-      }).from(Expenses)
+        createdAt: Expenses.createdAt
+      }).from(Budgets)
+      .rightJoin(Expenses, eq(Budgets.id, Expenses.budgetId))
       .where(eq(Expenses.createdBy=1, user?.primaryEmailAddress?.emailAddress))
       .orderBy(desc(Expenses.id));
 
       const filteredResult = result.filter(
         (row) => row.id !== null && row.name !== null && row.amount !== null && row.createdAt !== null
       );
-      setExpensesList(filteredResult);
+      setExpensesList(result);
     };
 
   return (
@@ -69,10 +70,10 @@ function Dashboard() {
           <BarChartDashboard 
           budgetList={budgetList}
           />
-        <ExpenseListTable 
-        expensesList={expensesList}
-        refreshData={()=>getBudgetList()} 
-        />  
+          <ExpenseListTable 
+          expensesList={expensesList}
+          refreshData={()=>getBudgetList()} 
+          />  
         </div>
         <div className='grid gap-5'>
           <h2 className='font-bold text-lg'></h2>
