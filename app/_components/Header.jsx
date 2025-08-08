@@ -3,7 +3,7 @@ import React from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { UserButton, useUser } from '@clerk/nextjs'
-import Link  from 'next/link'
+import Link  from 'next/link';
 
 function Header() {
 

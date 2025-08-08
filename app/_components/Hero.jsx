@@ -19,18 +19,18 @@ function Hero() {
         <a
           className="inline-block rounded border border-indigo-600 bg-indigo-600 px-5 py-3 font-medium
            text-white shadow-sm transition-colors hover:bg-blue-700"
-          href="#"
+          href="/dashboard"
         >
           Get Started
         </a>
       </div>
     </div>
   </div>
-  <Image src={'/dashboard.png'} alt='dashboard'
+  {/* <Image src={'/dashboard.png'} alt='dashboard'
   width={1000}
   height={700}
   className='-mt-5 rounded-xl border-2'
-  />
+  /> */}
 </section>
     </div>
   )
